@@ -1,0 +1,239 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    /* Alineamos todo arriba por defecto, bajaremos el contenido con margen */
+    align-items: flex-start; 
+    
+    /* CAMBIO 1: IMAGEN LOCAL */
+    /* Asegúrate de guardar tu imagen como 'fondo.jpg' en una carpeta 'img' */
+    background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.95)), url('img/fondo.svg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    padding: 20px;
+    
+    /* Evita scroll horizontal */
+    overflow-x: hidden; 
+}
+
+.main-content {
+    width: 100%;
+    max-width: 900px;
+    text-align: center;
+    
+    /* CAMBIO 2: LA MAGIA DEL CENTRADO */
+    /* Empujamos el contenido hacia abajo para que parezca centrado */
+    margin-top: 30vh; 
+    transition: margin-top 0.5s ease-in-out; /* Animación suave al subir */
+}
+
+/* CLASE QUE JS ACTIVARÁ CUANDO ESCRIBAS */
+body.searching .main-content {
+    margin-top: 40px; /* Sube el contenido arriba */
+}
+
+.title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #fff, #94a3b8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    color: #94a3b8;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+    transition: opacity 0.3s ease;
+}
+
+/* Opcional: Ocultar subtítulo al buscar para limpiar espacio */
+body.searching .subtitle {
+    display: none;
+}
+
+.input-wrapper {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto 50px auto;
+}
+
+input#search {
+    width: 100%;
+    padding: 18px 50px 18px 25px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(10px);
+    color: white;
+    font-size: 1.1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+input#search:focus {
+    border-color: #3b82f6;
+    background-color: rgba(30, 41, 59, 0.9);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.search-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.5;
+}
+
+.info-text {
+    font-size: 1.2rem;
+    color: #cbd5e1;
+    background: rgba(0,0,0,0.3);
+    padding: 15px;
+    border-radius: 8px;
+    display: inline-block;
+    animation: fadeIn 0.5s;
+}
+
+#results:not(.single-view) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    animation: fadeIn 0.5s ease-up;
+}
+
+/* El resto de estilos se mantiene igual... */
+.mini-card {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s, background 0.2s;
+    cursor: default;
+}
+
+.mini-card:hover {
+    transform: translateY(-5px);
+    background: rgba(59, 130, 246, 0.2);
+    border-color: #3b82f6;
+}
+
+.mini-card img {
+    width: 80px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.country-card-big {
+    display: flex;
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    max-width: 850px;
+    margin: 0 auto;
+    text-align: left;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.flag-side {
+    flex: 1;
+    position: relative;
+    min-height: 300px;
+}
+
+.flag-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.weather-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(5px);
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.weather-temp {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fbbf24;
+}
+
+.weather-desc {
+    text-transform: capitalize;
+    font-size: 0.95rem;
+    color: #e2e8f0;
+}
+
+.info-side {
+    flex: 1.2;
+    padding: 40px;
+}
+
+.info-side h2 {
+    font-size: 2.8rem;
+    margin-bottom: 25px;
+    font-weight: 800;
+    color: white;
+}
+
+.data-row {
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    color: #cbd5e1;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.data-row strong {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .country-card-big {
+        flex-direction: column;
+    }
+    .flag-side {
+        height: 250px;
+        flex: none;
+    }
+    .title { font-size: 2rem; }
+    .main-content { margin-top: 20vh; } /* Ajuste para móviles */
+}
