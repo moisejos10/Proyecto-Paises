@@ -7,7 +7,7 @@ let allCountries = [];
 
 const getCountries = async () => {
     try {
-        const url = 'https://restcountries.com/v3.1/all?fields=name,flags,capital,population,region,latlng,subregion';
+        const url = 'https://restcountries.com/v3.1/all?fields=name,flags,capital,population,region,latlng,subregion,timezones';
         const response = await fetch(url);
         
         if (!response.ok) throw new Error('Error al conectar');
@@ -79,10 +79,14 @@ const renderizar = (lista) => {
                     <img src="${pais.flags.svg}" alt="Bandera de ${pais.name.common}">
                     
                     <div class="weather-bar">
-                        <div id="weather-data">
-                            <span class="weather-temp">Cargando...</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span id="w-icon">☁️</span>
+                            <span id="w-desc" class="weather-desc">Cargando...</span>
                         </div>
-                        <div id="weather-desc" class="weather-desc">Conectando satélite...</div>
+                        
+                        <div style="font-size: 1.5rem; opacity: 0.5; margin: 0 20px;">|</div>
+                        
+                        <div id="w-temp" class="weather-temp" style="font-size: 1.2rem;">-- Celsius</div>
                     </div>
                 </div>
 
@@ -94,16 +98,20 @@ const renderizar = (lista) => {
                         <span>${pais.capital ? pais.capital[0] : 'N/A'}</span>
                     </div>
                     <div class="data-row">
-                        <strong>Región</strong>
-                        <span>${pais.region} (${pais.subregion})</span>
+                        <strong>Población</strong>
+                        <span>${pais.population.toLocaleString('es-ES')} habitantes</span>
                     </div>
                     <div class="data-row">
-                        <strong>Población</strong>
-                        <span>${pais.population.toLocaleString()} hab.</span>
+                        <strong>Región</strong>
+                        <span>${pais.region}</span>
                     </div>
                      <div class="data-row">
-                        <strong>Latitud</strong>
-                        <span>${pais.latlng ? pais.latlng[0].toFixed(2) : 'N/A'}</span>
+                        <strong>Sub Región</strong>
+                        <span>${pais.subregion}</span>
+                    </div>
+                     <div class="data-row">
+                        <strong>Zona Horaria</strong>
+                        <span>${pais.timezones ? pais.timezones[0] : 'N/A'}</span>
                     </div>
                 </div>
             </article>
@@ -124,24 +132,18 @@ const obtenerClima = async (lat, lon) => {
         const response = await fetch(url);
         const data = await response.json();
 
-        const temp = Math.round(data.main.temp);
+        const temp = data.main.temp.toFixed(2);
         const desc = data.weather[0].description;
         const iconCode = data.weather[0].icon; 
 
-        const weatherDiv = document.querySelector('#weather-data');
-        const descDiv = document.querySelector('#weather-desc');
+        const iconSpan = document.querySelector('#w-icon');
+        const descSpan = document.querySelector('#w-desc');
+        const tempDiv = document.querySelector('#w-temp');
 
-        if(weatherDiv && descDiv) {
-            weatherDiv.innerHTML = `
-                <span class="weather-temp" style="font-size: 2rem;">${temp}°C</span>
-            `;
-
-            descDiv.innerHTML = `
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <img src="https://openweathermap.org/img/wn/${iconCode}.png" alt="Icono clima" style="width:50px; height:50px;">
-                    <span style="text-transform: capitalize; font-size: 1rem;">${desc}</span>
-                </div>
-            `;
+        if(iconSpan && descSpan) {
+            iconSpan.innerHTML = `<img src="https://openweathermap.org/img/wn/${iconCode}.png" alt="icon" style="width:40px">`;
+            descSpan.textContent = desc;
+            tempDiv.textContent = `${temp} Celsius`;
         }
 
     } catch (error) {
